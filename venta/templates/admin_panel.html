@@ -1,0 +1,45 @@
+{% extends 'menu_admin.html' %}
+{% load static %}
+
+{% block title %}Panel de Administración{% endblock %}
+
+{% block admin_content %}
+<div class="container mt-4">
+  <div class="text-center mb-4">
+    <h1 class="fw-bold">Panel de Administración</h1>
+    <p class="text-muted">Bienvenido, aquí puedes gestionar todo tu sistema.</p>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-md-3 mb-4">
+      <div class="card shadow-lg border-0 h-100">
+        <div class="card-body text-center">
+          <h5 class="card-title">Productos</h5>
+          <p class="card-text text-muted">Administra tus productos.</p>
+          <a href="{% url 'gestionar_productos' %}" class="btn btn-primary w-100">Ir</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 mb-4">
+      <div class="card shadow-lg border-0 h-100">
+        <div class="card-body text-center">
+          <h5 class="card-title">Categorías</h5>
+          <p class="card-text text-muted">Gestiona las categorías de productos.</p>
+          <a href="{% url 'gestionar_categorias' %}" class="btn btn-primary w-100">Ir</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 mb-4">
+      <div class="card shadow-lg border-0 h-100">
+        <div class="card-body text-center">
+          <h5 class="card-title">Usuarios</h5>
+          <p class="card-text text-muted">Administra los usuarios del sistema.</p>
+          <a href="{% url 'gestionar_usuarios' %}" class="btn btn-primary w-100">Ir</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

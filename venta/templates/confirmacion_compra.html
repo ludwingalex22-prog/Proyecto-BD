@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Factura de Compra{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-sm p-4">
+        <h2 class="text-center mb-4 text-success">✅ ¡Compra Exitosa!</h2>
+
+        <div class="card p-3 mb-4 bg-light">
+            <h4>📋 Datos del Comprador</h4>
+            <p><strong>Nombre:</strong> {{ nombre }} {{ apellido }}</p>
+            <p><strong>Dirección:</strong> {{ direccion }}</p>
+            <p><strong>Teléfono:</strong> {{ telefono }}</p>
+        </div>
+
+        <h4>🧾 Detalle de la Compra</h4>
+        <table class="table table-bordered mt-3 text-center align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for detalle in detalles %}
+                <tr>
+                    <td>{{ detalle.producto.nombre }}</td>
+                    <td>{{ detalle.cantidad }}</td>
+                    <td>Q{{ detalle.producto.precio }}</td>
+                    <td>Q{{ detalle.subtotal }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h4 class="mt-4 text-end">Total pagado: <span class="text-success fw-bold">Q{{ total }}</span></h4>
+
+        <div class="d-flex justify-content-between mt-3">
+            <a href="{% url 'generar_factura_pdf' pedido.id %}" class="btn btn-outline-primary">Descargar factura PDF</a>
+            <a href="{% url 'home' %}" class="btn btn-primary">Volver al inicio</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

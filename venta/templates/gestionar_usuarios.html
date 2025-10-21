@@ -1,0 +1,107 @@
+{% extends 'menu_admin.html' %}
+{% load static %}
+
+{% block admin_content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Gestión de Usuarios</h2>
+
+    <form method="POST" class="card p-3 mb-4">
+        {% csrf_token %}
+        <input type="hidden" name="id_usuario" id="id_usuario">
+
+        <div class="row g-3">
+            <div class="col-md-3">
+                <input type="text" name="username" id="username" class="form-control" placeholder="Nombre de usuario" required>
+            </div>
+            <div class="col-md-3">
+                <input type="email" name="email" id="email" class="form-control" placeholder="Correo electrónico">
+            </div>
+            <div class="col-md-3">
+                <select name="rol" id="rol" class="form-select" required>
+                    <option value="">Selecciona un rol</option>
+                    <option value="admin">Administrador</option>
+                    <option value="cliente">Cliente</option>
+                </select>
+            </div>
+            <div class="col-md-3" id="password_div" style="display:none;">
+                <input type="password" name="password" id="password" class="form-control" placeholder="Contraseña">
+            </div>
+        </div>
+
+        <div class="mt-3 text-center">
+            <button type="submit" class="btn btn-success">Guardar Usuario</button>
+            <button type="button" class="btn btn-secondary" onclick="limpiarFormulario()">Cancelar</button>
+        </div>
+    </form>
+
+    {% if messages %}
+    <div>
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <table class="table table-bordered text-center align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Usuario</th>
+                <th>Correo</th>
+                <th>Rol</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+            <tr>
+                <td>{{ usuario.id }}</td>
+                <td>{{ usuario.username }}</td>
+                <td>{{ usuario.email }}</td>
+                <td>{{ usuario.rol }}</td>
+                <td>
+                    <button class="btn btn-primary btn-sm" onclick="editarUsuario('{{ usuario.id }}', '{{ usuario.username }}', '{{ usuario.email }}', '{{ usuario.rol }}')">Modificar</button>
+                    <a href="{% url 'eliminar_usuario' usuario.id %}" class="btn btn-danger btn-sm" onclick="return confirmarEliminacion()">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+function editarUsuario(id, username, email, rol) {
+    document.getElementById("id_usuario").value = id;
+    document.getElementById("username").value = username;
+    document.getElementById("email").value = email;
+    document.getElementById("rol").value = rol;
+    togglePassword();
+}
+
+function limpiarFormulario() {
+    document.getElementById("id_usuario").value = "";
+    document.getElementById("username").value = "";
+    document.getElementById("email").value = "";
+    document.getElementById("rol").value = "";
+    document.getElementById("password").value = "";
+    document.getElementById("password_div").style.display = "none";
+}
+
+document.getElementById("rol").addEventListener("change", togglePassword);
+
+function togglePassword() {
+    const rol = document.getElementById("rol").value;
+    const passwordDiv = document.getElementById("password_div");
+    if (rol === "admin") {
+        passwordDiv.style.display = "block";
+    } else {
+        passwordDiv.style.display = "none";
+        document.getElementById("password").value = "";
+    }
+}
+
+function confirmarEliminacion() {
+    return confirm("¿Estás seguro de eliminar este usuario?");
+}
+</script>
+{% endblock %}

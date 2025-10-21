@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Carrito de Compras{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">🛒 Tu Carrito</h2>
+
+    {% if carrito %}
+    <table class="table table-bordered text-center align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Imagen</th>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for id, item in carrito.items %}
+            <tr>
+                <td>
+                    {% if item.imagen %}
+                    <img src="{{ item.imagen }}" width="60">
+                    {% else %}
+                    <img src="{% static 'img/placeholder.png' %}" width="60">
+                    {% endif %}
+                </td>
+                <td>{{ item.nombre }}</td>
+                <td>Q{{ item.precio }}</td>
+                <td>{{ item.cantidad }}</td>
+                <td>Q{{ item.subtotal }}</td>
+                <td>
+                    <a href="{% url 'eliminar_carrito' id %}" class="btn btn-danger btn-sm">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h4 class="text-end mt-3">Total: <span class="text-success fw-bold">Q{{ total }}</span></h4>
+
+    <div class="text-center mt-4">
+        <a href="{% url 'datos_compra' %}" class="btn btn-primary btn-lg">Confirmar compra</a>
+        <a href="{% url 'home' %}" class="btn btn-secondary btn-lg">Seguir comprando</a>
+    </div>
+
+    {% else %}
+    <div class="alert alert-info text-center">
+        Tu carrito está vacío.
+    </div>
+    <div class="text-center">
+        <a href="{% url 'home' %}" class="btn btn-primary">Volver a comprar</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+/* styles.css */
+
+/* Banner home */
+.jumbotron {
+    background-image: url('https://picsum.photos/1200/400'); /* Imagen de ejemplo */
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-shadow: 2px 2px 4px #000;
+}
+
+/* Botones de categorías */
+.btn-categoria {
+    height: 100px;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Botón administrador */
+.btn-admin {
+    font-size: 1.5rem;
+    padding: 15px 30px;
+}
+
+/* Navbar admin */
+.navbar {
+    margin-bottom: 20px;
+}

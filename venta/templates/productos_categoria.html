@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ categoria.nombre_categoria }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <a href="{% url 'ver_carrito' %}" class="btn btn-outline-dark position-relative">
+        🛒 Ver carrito
+    </a>
+    <h2 class="mb-4 text-center">{{ categoria.nombre_categoria }}</h2>
+    <p class="text-center text-muted">{{ categoria.descripcion }}</p>
+
+    {% if productos %}
+    <div class="row mt-4">
+        {% for producto in productos %}
+        <div class="col-md-3 mb-4">
+            <div class="card h-100 shadow-sm">
+                {% if producto.imagen %}
+                <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}">
+                {% else %}
+                <img src="{% static 'img/placeholder.png' %}" class="card-img-top" alt="Sin imagen">
+                {% endif %}
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ producto.nombre }}</h5>
+                    <p class="card-text text-muted">{{ producto.descripcion|truncatechars:80 }}</p>
+                    <p class="fw-bold text-primary">Q{{ producto.precio }}</p>
+                    <p class="text-secondary">Disponibles: <strong>{{ producto.stock }}</strong></p>
+
+                    <form action="{% url 'agregar_carrito' producto.id %}" method="POST" class="d-flex justify-content-center align-items-center gap-2">
+                        {% csrf_token %}
+                        <input type="number" name="cantidad" value="1" min="1" max="{{ producto.stock }}" class="form-control w-25 text-center">
+                        <button type="submit" class="btn btn-success btn-sm">Agregar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center">
+        No hay productos disponibles en esta categoría.
+    </div>
+    {% endif %}
+
+    <div class="text-center mt-4">
+        <a href="{% url 'home' %}" class="btn btn-secondary">Volver al inicio</a>
+    </div>
+</div>
+{% endblock %}

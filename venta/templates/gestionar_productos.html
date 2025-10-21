@@ -1,0 +1,140 @@
+{% extends 'menu_admin.html' %}
+{% load static %}
+
+{% block title %}Gestión de Productos{% endblock %}
+
+{% block admin_content %}
+<div class="container mt-4">
+  <h2 class="mb-4 text-center">Gestión de Productos</h2>
+
+  <!-- FORMULARIO CREAR/MODIFICAR PRODUCTO -->
+  <form method="POST" id="producto-form" class="card p-3 mb-4" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="hidden" name="producto_id" id="producto_id">
+
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label class="form-label">Nombre</label>
+        <input type="text" class="form-control" name="nombre" id="nombre" required>
+      </div>
+      <div class="col-md-4 mb-3">
+        <label class="form-label">Precio</label>
+        <input type="number" step="0.01" class="form-control" name="precio" id="precio" required>
+      </div>
+      <div class="col-md-4 mb-3">
+        <label class="form-label">Stock</label>
+        <input type="number" class="form-control" name="stock" id="stock" value="0" required>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Categoría</label>
+        <select class="form-select" name="categoria" id="categoria" required>
+          {% for cat in categorias %}
+          <option value="{{ cat.id }}">{{ cat.nombre_categoria }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Imagen</label>
+        <input type="file" class="form-control" name="imagen" id="imagen">
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Descripción</label>
+      <textarea class="form-control" name="descripcion" id="descripcion"></textarea>
+    </div>
+
+    <div class="form-check mb-3">
+      <input class="form-check-input" type="checkbox" name="activo" id="activo" checked>
+      <label class="form-check-label">Activo</label>
+    </div>
+
+    <div class="text-center">
+      <button type="submit" class="btn btn-success" id="submit-button">Crear Producto</button>
+      <button type="button" class="btn btn-secondary" id="cancel-modificacion" style="display:none;">Cancelar Modificación</button>
+    </div>
+  </form>
+
+  <!-- TABLA DE PRODUCTOS -->
+  <div class="card">
+    <table class="table table-bordered text-center align-middle mb-0">
+      <thead class="table-dark">
+        <tr>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Precio</th>
+          <th>Stock</th>
+          <th>Categoría</th>
+          <th>Activo</th>
+          <th>Imagen</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for producto in productos %}
+        <tr>
+          <td>{{ producto.nombre }}</td>
+          <td>{{ producto.descripcion }}</td>
+          <td>${{ producto.precio }}</td>
+          <td>{{ producto.stock }}</td>
+          <td>{{ producto.categoria.nombre_categoria }}</td>
+          <td>{{ producto.activo|yesno:"Sí,No" }}</td>
+          <td>
+            {% if producto.imagen %}
+              <img src="{{ producto.imagen.url }}" alt="Imagen" width="50">
+            {% endif %}
+          </td>
+          <td>
+            <a href="#" class="btn btn-sm btn-primary btn-modificar"
+               data-id="{{ producto.id }}"
+               data-nombre="{{ producto.nombre }}"
+               data-descripcion="{{ producto.descripcion }}"
+               data-precio="{{ producto.precio }}"
+               data-stock="{{ producto.stock }}"
+               data-categoria="{{ producto.categoria.id }}"
+               data-activo="{{ producto.activo|yesno:'true,false' }}">
+               Modificar
+            </a>
+            <a href="{% url 'eliminar_producto' producto.id %}" class="btn btn-sm btn-danger">Eliminar</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('producto-form');
+  const submitButton = document.getElementById('submit-button');
+  const cancelButton = document.getElementById('cancel-modificacion');
+  const modificarButtons = document.querySelectorAll('.btn-modificar');
+
+  modificarButtons.forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      document.getElementById('producto_id').value = this.dataset.id;
+      document.getElementById('nombre').value = this.dataset.nombre;
+      document.getElementById('descripcion').value = this.dataset.descripcion;
+      document.getElementById('precio').value = this.dataset.precio;
+      document.getElementById('stock').value = this.dataset.stock;
+      document.getElementById('categoria').value = this.dataset.categoria;
+      document.getElementById('activo').checked = this.dataset.activo === 'true';
+      submitButton.textContent = 'Confirmar Modificación';
+      cancelButton.style.display = 'inline-block';
+    });
+  });
+
+  cancelButton.addEventListener('click', function() {
+    form.reset();
+    document.getElementById('producto_id').value = '';
+    submitButton.textContent = 'Crear Producto';
+    cancelButton.style.display = 'none';
+  });
+});
+</script>
+{% endblock %}

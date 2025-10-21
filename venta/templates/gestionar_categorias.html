@@ -1,0 +1,81 @@
+{% extends 'menu_admin.html' %}
+{% load static %}
+
+{% block title %}Gestión de Categorías{% endblock %}
+
+{% block admin_content %}
+<div class="container mt-4">
+  <h2 class="mb-4 text-center">Gestión de Categorías</h2>
+
+  <!-- FORMULARIO CREAR/MODIFICAR CATEGORÍA -->
+  <form method="POST" id="categoriaForm" class="card p-3 mb-4">
+    {% csrf_token %}
+    <input type="hidden" name="categoria_id" id="categoria_id">
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Nombre de la Categoría</label>
+        <input type="text" class="form-control" name="nombre_categoria" id="nombre_categoria" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Descripción</label>
+        <textarea class="form-control" name="descripcion" id="descripcion"></textarea>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <button type="submit" class="btn btn-success" id="btn-submit">Crear Categoría</button>
+      <button type="button" class="btn btn-secondary" id="btn-cancel" style="display:none;" onclick="cancelarEdicion()">Cancelar</button>
+    </div>
+  </form>
+
+  <!-- TABLA DE CATEGORÍAS -->
+  <div class="card">
+    <table class="table table-bordered text-center align-middle mb-0">
+      <thead class="table-dark">
+        <tr>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cat in categorias %}
+        <tr>
+          <td>{{ cat.nombre_categoria }}</td>
+          <td>{{ cat.descripcion }}</td>
+          <td>
+            <button class="btn btn-sm btn-primary"
+              onclick="editarCategoria('{{ cat.id }}', '{{ cat.nombre_categoria }}', `{{ cat.descripcion|escapejs }}`)">
+              Modificar
+            </button>
+            <a href="{% url 'eliminar_categoria' cat.id %}" class="btn btn-sm btn-danger"
+               onclick="return confirm('¿Seguro que deseas eliminar esta categoría?');">
+               Eliminar
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SCRIPT PARA RELLENAR FORMULARIO -->
+<script>
+function editarCategoria(id, nombre, descripcion) {
+  document.getElementById('categoria_id').value = id;
+  document.getElementById('nombre_categoria').value = nombre;
+  document.getElementById('descripcion').value = descripcion;
+  document.getElementById('btn-submit').innerText = "Guardar Cambios";
+  document.getElementById('btn-cancel').style.display = "inline-block";
+}
+
+function cancelarEdicion() {
+  document.getElementById('categoriaForm').reset();
+  document.getElementById('categoria_id').value = "";
+  document.getElementById('btn-submit').innerText = "Crear Categoría";
+  document.getElementById('btn-cancel').style.display = "none";
+}
+</script>
+{% endblock %}

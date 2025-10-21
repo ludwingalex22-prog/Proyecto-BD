@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login Admin{% endblock %}
+{% block content %}
+<div class="container mt-5" style="max-width: 400px;">
+    <h2 class="text-center mb-4">Login Superusuario</h2>
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="username" class="form-control mb-3" placeholder="Usuario" required>
+        <input type="password" name="password" class="form-control mb-3" placeholder="Contraseña" required>
+        <button class="btn btn-primary w-100">Ingresar</button>
+    </form>
+</div>
+{% endblock %}

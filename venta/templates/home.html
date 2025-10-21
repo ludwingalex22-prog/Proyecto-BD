@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <!-- Banner -->
+    <div class="jumbotron p-5 rounded text-center">
+        <h1>Bienvenido a Nuestra Tienda</h1>
+        <p>Explora nuestras categorías</p>
+    </div>
+
+    <!-- Categorías -->
+    <div class="row mt-4 text-center">
+        {% for categoria in categorias %}
+        <div class="col-md-3 mb-3">
+           <a href="{% url 'productos_por_categoria' categoria.id %}" class="btn btn-outline-primary w-100 btn-categoria">{{ categoria.nombre_categoria }}</a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Opciones de administrador -->
+    <div class="text-center mt-5">
+        <a href="{% url 'admin_login' %}" class="btn btn-danger btn-lg btn-admin">Opciones de Administrador</a>
+    </div>
+</div>
+{% endblock %}
