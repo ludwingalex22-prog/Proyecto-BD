@@ -77,7 +77,7 @@ def gestionar_productos(request):
                 precio=precio,
                 stock=stock,
                 categoria=categoria,
-                imagen_url=imagen,
+                imagen=imagen,
                 activo=activo
             )
         return redirect('gestionar_productos')
