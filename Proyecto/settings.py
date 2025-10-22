@@ -9,10 +9,12 @@ DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
 ALLOWED_HOSTS = [
     'proyecto-bd.azurewebsites.net',
+    'proyecto-bd-ejefecgxcmdaejf4.centralus-01.azurewebsites.net',
     'proyecto-bd-jkpn.onrender.com',
     'localhost',
     '127.0.0.1',
 ]
+
 
 CSRF_TRUSTED_ORIGINS = [
     'https://proyecto-bd.azurewebsites.net',
