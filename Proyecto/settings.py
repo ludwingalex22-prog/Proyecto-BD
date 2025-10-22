@@ -17,7 +17,7 @@ ALLOWED_HOSTS = [
 
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://proyecto-bd.azurewebsites.net',
+    'https://proyecto-bd-ejefecgxcmdaejf4.centralus-01.azurewebsites.net'
 ]
 
 # --- Apps ---
